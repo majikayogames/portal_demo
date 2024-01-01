@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://dvua5q4aglsvp"]
+
+[ext_resource type="Script" path="res://Portals/PortalMeshDuplicator.gd" id="1_0h1lk"]
+
+[node name="PortalMeshDuplicator" type="Node3D"]
+script = ExtResource("1_0h1lk")

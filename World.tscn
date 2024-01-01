@@ -1,0 +1,106 @@
+[gd_scene load_steps=11 format=3 uid="uid://cocecrnogsrky"]
+
+[ext_resource type="Script" path="res://addons/zylann.hterrain/hterrain.gd" id="1_jv1xq"]
+[ext_resource type="Resource" path="res://hterrain_data/data.hterrain" id="2_ibkcx"]
+[ext_resource type="Resource" uid="uid://bs78cbv3sy2q2" path="res://hterrain_data/texture_set.tres" id="3_5u2tk"]
+[ext_resource type="PackedScene" uid="uid://cpfo00q3j184l" path="res://Portals/Portal.tscn" id="4_e3ihv"]
+[ext_resource type="PackedScene" uid="uid://bixl2bghc80tt" path="res://Player.tscn" id="5_y6cpe"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_d3qqd"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_lg4ok"]
+sky_material = SubResource("ProceduralSkyMaterial_d3qqd")
+
+[sub_resource type="Environment" id="Environment_hi5kn"]
+background_mode = 2
+sky = SubResource("Sky_lg4ok")
+tonemap_mode = 2
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i83ly"]
+albedo_color = Color(0, 0.729412, 1, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_trgb1"]
+albedo_color = Color(1, 0, 0.176471, 1)
+
+[node name="World" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_hi5kn")
+
+[node name="HTerrain" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -8, 100)
+script = ExtResource("1_jv1xq")
+centered = true
+_terrain_data = ExtResource("2_ibkcx")
+chunk_size = 32
+collision_enabled = true
+collision_layer = 1
+collision_mask = 1
+shader_type = "Classic4Lite"
+custom_shader = null
+custom_globalmap_shader = null
+texture_set = ExtResource("3_5u2tk")
+render_layers = 1
+cast_shadow = 1
+shader_params/u_ground_uv_scale = 20
+shader_params/u_depth_blending = true
+shader_params/u_triplanar = false
+shader_params/u_tile_reduction = Vector4(0, 0, 0, 0)
+shader_params/u_specular = 0.5
+
+[node name="Portal1" type="Node3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, -5, -27)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Portal1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+use_collision = true
+size = Vector3(8, 3, 8)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Portal1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+material_overlay = SubResource("StandardMaterial3D_i83ly")
+use_collision = true
+size = Vector3(6, 8, 2)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Portal1/CSGBox3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0.25)
+operation = 2
+use_collision = true
+size = Vector3(5, 7.5, 3.5)
+
+[node name="Portal" parent="Portal1" node_paths=PackedStringArray("other_portal") instance=ExtResource("4_e3ihv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 0)
+other_portal = NodePath("../../Portal2/Portal")
+cull_layer = 3
+size = Vector2(5, 7.5)
+
+[node name="Portal2" type="Node3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 13, -4.4, -27)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Portal2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -3, 0)
+use_collision = true
+size = Vector3(8, 3, 8)
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Portal2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.5, 0)
+material_overlay = SubResource("StandardMaterial3D_trgb1")
+use_collision = true
+size = Vector3(6, 8, 2)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Portal2/CSGBox3D2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.25, 0.25)
+operation = 2
+use_collision = true
+size = Vector3(5, 7.5, 3.5)
+
+[node name="Portal" parent="Portal2" node_paths=PackedStringArray("other_portal") instance=ExtResource("4_e3ihv")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.25, 0)
+other_portal = NodePath("../../Portal1/Portal")
+cull_layer = 4
+size = Vector2(5, 7.5)
+
+[node name="Player" parent="." instance=ExtResource("5_y6cpe")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)

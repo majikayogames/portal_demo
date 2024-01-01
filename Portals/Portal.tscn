@@ -1,0 +1,50 @@
+[gd_scene load_steps=7 format=3 uid="uid://cpfo00q3j184l"]
+
+[ext_resource type="Script" path="res://Portals/Portal.gd" id="1_svpsx"]
+[ext_resource type="Shader" path="res://Portals/Portal.gdshader" id="2_vb6fb"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_mmtc8"]
+viewport_path = NodePath("CameraViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_u7m5w"]
+resource_local_to_scene = true
+render_priority = 0
+shader = ExtResource("2_vb6fb")
+shader_parameter/texture_albedo = SubResource("ViewportTexture_mmtc8")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_s5fep"]
+size = Vector3(5.2, 7.7, 2)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_pspbq"]
+properties/0/path = NodePath(".:visible")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Portal" type="Area3D"]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_svpsx")
+
+[node name="PortalVisual" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.15)
+size = Vector3(1, 2, 0.3)
+material = SubResource("ShaderMaterial_u7m5w")
+
+[node name="CameraViewport" type="SubViewport" parent="."]
+render_target_update_mode = 3
+
+[node name="Camera3D" type="Camera3D" parent="CameraViewport"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_s5fep")
+
+[node name="ShapeCast3D" type="ShapeCast3D" parent="."]
+enabled = false
+shape = SubResource("BoxShape3D_s5fep")
+collision_mask = 3
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_pspbq")
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="body_exited" from="." to="." method="_on_body_exited"]
