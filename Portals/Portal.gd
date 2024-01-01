@@ -3,7 +3,11 @@ class_name Portal
 extends Area3D
 
 @export var other_portal : Node3D
-@export var cull_layer : int
+
+## The visual layer the portal is rendered on. Set this to something other than the layer your level and models are on.
+## This is used to hide the destination portal from the camera's view so we can see past it.
+@export var cull_layer : int = 4
+
 @export var make_mesh_duplicates : bool = true
 @export var portal_area_z_margin : = 1.0
 @export var portal_area_x_margin : = 0.1
