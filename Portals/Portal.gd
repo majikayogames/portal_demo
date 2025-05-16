@@ -168,7 +168,7 @@ func _thicken_portal_if_necessary_to_prevent_camera_near_cull():
 	if (abs(dist_from_portal_plane_forward) > 1.0
 		or abs(dist_from_portal_plane_to_right) > half_portal_width + 0.3
 		or dist_from_portal_plane_up > half_portal_height + 0.3):
-		$PortalVisual.size.z = 0.0
+		$PortalVisual.size.z = 0.00001
 		$PortalVisual.position.z = 0.0
 		return
 		
